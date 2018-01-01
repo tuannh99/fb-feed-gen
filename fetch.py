@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from bs4 import BeautifulSoup
 from bs4 import SoupStrainer
 from datetime import datetime
@@ -131,12 +132,12 @@ def extract_items(contents):
 
     if soup.div:
         for item in soup.div.div.div.children:
-            item_link = item.find('a', text='Full Story')
+            item_link = item.find('a', text='Toàn bộ tin')
             if not item_link:
                 continue  # ignore if no permalink found
 
             url = fix_guid_url(item_link['href'])
-            date = parse(item.find('abbr').text.strip(), fuzzy=True)
+            date = parse(item.find('abbr').text.strip(), fuzzy=True, dayfirst=True)
             author = item.div.find('h3').a.get_text(strip=True)
             article_byline = item.div.div.contents[0]
 
@@ -154,7 +155,7 @@ def extract_items(contents):
 
             items.append({
                 'url': url,
-                'title': article_text[:75],
+                'title': article_text[:125],
                 'article': article,
                 'date': date,
                 'author': author
